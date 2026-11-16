@@ -71,4 +71,4 @@ La aplicación queda en `http://localhost:5173`.
 - Registro, edición y eliminación de viajes asociando un vehículo y un conductor.
 - Historial de viajes y total de kilómetros por vehículo o conductor.
 - Validaciones con `express-validator` en el backend y en los formularios del frontend.
-- Respuestas HTTP 400, 401, 404 y 500.
+- Respuestas HTTP 400, 401, 403, 404 y 500.
