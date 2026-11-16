@@ -1,0 +1,91 @@
+@baseUrl = http://localhost:3000/api
+@email = ezequiel@example.com
+@password = secreto123
+
+### 0. Obtener token de sesión
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Token capturado automáticamente
+@token = {{login.response.body.token}}
+
+### Listado de vehículos
+GET {{baseUrl}}/vehiculos
+Authorization: Bearer {{token}}
+
+### Listado filtrado por marca
+GET {{baseUrl}}/vehiculos?marca=Volvo
+Authorization: Bearer {{token}}
+
+### Obtener vehículo por id
+GET {{baseUrl}}/vehiculos/1
+Authorization: Bearer {{token}}
+
+### Crear vehículo
+POST {{baseUrl}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "Scania",
+  "modelo": "R 450",
+  "patente": "AD789EF",
+  "anio": 2022,
+  "capacidad_carga": 28000
+}
+
+### Actualizar vehículo
+PUT {{baseUrl}}/vehiculos/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "Volvo",
+  "modelo": "FH 500",
+  "patente": "AB123CD",
+  "anio": 2022,
+  "capacidad_carga": 26000
+}
+
+### Eliminar vehículo
+DELETE {{baseUrl}}/vehiculos/3
+Authorization: Bearer {{token}}
+
+### Crear vehículo con datos inválidos (espera 400)
+POST {{baseUrl}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "marca": "",
+  "modelo": "X",
+  "patente": "123",
+  "anio": 1900,
+  "capacidad_carga": -5
+}
+
+### Crear vehículo sin token (espera 401)
+POST {{baseUrl}}/vehiculos
+Content-Type: application/json
+
+{
+  "marca": "Iveco",
+  "modelo": "Stralis",
+  "patente": "AE111AA",
+  "anio": 2020,
+  "capacidad_carga": 20000
+}
+
+### Vehículo inexistente (espera 404)
+GET {{baseUrl}}/vehiculos/9999
+Authorization: Bearer {{token}}
+
+### Eliminar vehículo con viajes asociados (espera 409)
+DELETE {{baseUrl}}/vehiculos/1
+Authorization: Bearer {{token}}

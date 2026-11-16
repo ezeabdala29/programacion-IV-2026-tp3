@@ -1,0 +1,82 @@
+@baseUrl = http://localhost:3000/api
+@email = ezequiel@example.com
+@password = secreto123
+
+### 0. Obtener token de sesión
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Token capturado automáticamente
+@token = {{login.response.body.token}}
+
+### Listado de conductores
+GET {{baseUrl}}/conductores
+Authorization: Bearer {{token}}
+
+### Listado filtrado por apellido
+GET {{baseUrl}}/conductores?apellido=Perez
+Authorization: Bearer {{token}}
+
+### Obtener conductor por id
+GET {{baseUrl}}/conductores/1
+Authorization: Bearer {{token}}
+
+### Crear conductor
+POST {{baseUrl}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Carlos",
+  "apellido": "Rodríguez",
+  "documento": "32444555",
+  "nro_licencia": "LIC-0003",
+  "fecha_alta_licencia": "2023-02-10",
+  "fecha_vencimiento_licencia": "2028-02-10"
+}
+
+### Actualizar conductor
+PUT {{baseUrl}}/conductores/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "documento": "30111222",
+  "nro_licencia": "LIC-0001",
+  "fecha_alta_licencia": "2022-03-15",
+  "fecha_vencimiento_licencia": "2027-03-15"
+}
+
+### Eliminar conductor
+DELETE {{baseUrl}}/conductores/3
+Authorization: Bearer {{token}}
+
+### Crear conductor con datos inválidos (espera 400)
+POST {{baseUrl}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "X",
+  "apellido": "",
+  "documento": "123",
+  "nro_licencia": "A",
+  "fecha_alta_licencia": "2030-01-01",
+  "fecha_vencimiento_licencia": "2029-01-01"
+}
+
+### Conductor inexistente (espera 404)
+GET {{baseUrl}}/conductores/9999
+Authorization: Bearer {{token}}
+
+### Eliminar conductor con viajes asociados (espera 409)
+DELETE {{baseUrl}}/conductores/1
+Authorization: Bearer {{token}}

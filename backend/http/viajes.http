@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:3000/api
+@email = ezequiel@example.com
+@password = secreto123
+
+### 0. Obtener token de sesión
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Token capturado automáticamente
+@token = {{login.response.body.token}}
+
+### Listado de viajes
+GET {{baseUrl}}/viajes
+Authorization: Bearer {{token}}
+
+### Historial por vehículo
+GET {{baseUrl}}/viajes?vehiculo_id=1
+Authorization: Bearer {{token}}
+
+### Historial por conductor
+GET {{baseUrl}}/viajes?conductor_id=1
+Authorization: Bearer {{token}}
+
+### Historial por rango de fechas
+GET {{baseUrl}}/viajes?desde=2026-01-01&hasta=2026-12-31
+Authorization: Bearer {{token}}
+
+### Obtener viaje por id
+GET {{baseUrl}}/viajes/1
+Authorization: Bearer {{token}}
+
+### Registrar viaje
+POST {{baseUrl}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-14T08:00:00.000Z",
+  "fecha_llegada": "2026-11-14T18:30:00.000Z",
+  "origen": "La Rioja",
+  "destino": "Córdoba",
+  "kilometros": 430.5,
+  "observaciones": "Carga general"
+}
+
+### Actualizar viaje
+PUT {{baseUrl}}/viajes/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 2,
+  "fecha_salida": "2026-11-15T09:00:00.000Z",
+  "fecha_llegada": "2026-11-15T20:00:00.000Z",
+  "origen": "La Rioja",
+  "destino": "Mendoza",
+  "kilometros": 620,
+  "observaciones": "Se cambió el conductor asignado"
+}
+
+### Eliminar viaje
+DELETE {{baseUrl}}/viajes/1
+Authorization: Bearer {{token}}
+
+### Resumen de kilómetros por vehículo y por conductor
+GET {{baseUrl}}/viajes/resumen
+Authorization: Bearer {{token}}
+
+### Viaje con fechas inválidas (espera 400)
+POST {{baseUrl}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-14T18:00:00.000Z",
+  "fecha_llegada": "2026-11-14T08:00:00.000Z",
+  "origen": "La Rioja",
+  "destino": "Córdoba",
+  "kilometros": 0
+}
+
+### Viaje con vehículo inexistente (espera 404)
+POST {{baseUrl}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "vehiculo_id": 9999,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-14T08:00:00.000Z",
+  "fecha_llegada": "2026-11-14T18:00:00.000Z",
+  "origen": "La Rioja",
+  "destino": "Córdoba",
+  "kilometros": 400
+}

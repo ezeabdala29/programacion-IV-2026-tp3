@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:3000/api
+@email = ezequiel@example.com
+@password = secreto123
+
+### Salud del servicio
+GET {{baseUrl}}/salud
+
+### Registro de usuario
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Ezequiel Leguiza",
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Inicio de sesión
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Guardar token obtenido del login
+@token = {{login.response.body.token}}
+
+### Perfil del usuario autenticado
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Login con contraseña incorrecta (espera 401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "incorrecta"
+}
+
+### Registro con email inválido (espera 400)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "A",
+  "email": "no-es-un-email",
+  "password": "123"
+}
