@@ -1,0 +1,21 @@
+{
+  "name": "tp3-transporte-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Frontend en React para la gestión de vehículos, conductores y viajes - Programación IV UTN FRLR",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}
